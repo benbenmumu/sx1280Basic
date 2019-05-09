@@ -1,0 +1,15 @@
+# sx1280Basic
+sx1280基本收发  
+单片机型号：STM32L431RCT6  
+引脚连接：  
+SPI1_MISO:PA6  
+SPI1_MOSI:PA7  
+SPI1_SCK:PA5  
+SPI1_NSS:PA4  
+BUSY:PB2  
+RESET:PB11  
+DIO1:PB1  
+DIO2:PB0  
+DIO3:PC5  
+  
+使用STM32CubeMX5.1.0构建工程
