@@ -35,8 +35,8 @@ void LORA2G4Init( void )
 
     LORA2G4_modulationParams.PacketType = SX1280_PACKET_TYPE_LORA;
     LORA2G4_modulationParams.PacketType = SX1280_PACKET_TYPE_LORA;
-    LORA2G4_modulationParams.Params.LoRa.SpreadingFactor = SX1280_LORA_SF9;
-    LORA2G4_modulationParams.Params.LoRa.Bandwidth = SX1280_LORA_BW_0200;
+    LORA2G4_modulationParams.Params.LoRa.SpreadingFactor = SX1280_LORA_SF10;
+    LORA2G4_modulationParams.Params.LoRa.Bandwidth = SX1280_LORA_BW_1600;
     LORA2G4_modulationParams.Params.LoRa.CodingRate = SX1280_LORA_CR_LI_4_7;
 
     LORA2G4_packetParams.PacketType = SX1280_PACKET_TYPE_LORA;

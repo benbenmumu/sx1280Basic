@@ -37,7 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define LORAMODE             1  //0 for Tx and 1 for Rx
+#define LORAMODE             0  //0 for Tx and 1 for Rx
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -118,7 +118,7 @@ int main(void)
       {
           while(HAL_UART_Transmit_IT(&huart1, "hello\r\n", 7) == HAL_BUSY);
           LORA2G4SendData("hello\r\n", 7);
-          HAL_Delay(100);
+          HAL_Delay(40);
       }
       #else
       {
