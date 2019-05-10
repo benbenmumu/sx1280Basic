@@ -38,7 +38,14 @@
  */
 #define LORA2G4_RX_TIMEOUT_TICK_SIZE                        SX1280_RADIO_TICK_SIZE_1000_US
 
+/*!
+ * \brief The device address
+ */
+#define LORA2G4_RANGING_DIVICE                                      0x00010001
+
+void LORA2G4SetParams( void );
 void LORA2G4Init( void );
+void LORA2G4InitRanging(SX1280_RadioRangingRoles_t role);
 void LORA2G4SetPayloadLength(uint8_t length);
 void LORA2G4SendData(uint8_t* txBuffer, uint8_t size);
 void LORA2G4SetRx( void );

@@ -21,7 +21,16 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#ifdef __GNUC__
+	#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+	#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+PUTCHAR_PROTOTYPE
+{
+		while(HAL_UART_Transmit(&huart1 , (uint8_t *)&ch, 1, 0xFFFF) == HAL_BUSY);
+		return ch;
+}
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;

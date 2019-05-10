@@ -9,7 +9,7 @@
  */
 typedef void ( SX1280DioIrqHandler )( void );
 
-/*!
+/*!SX1280SetDeviceRangingAddress
  * \brief The address of the instruction RAM and its size
  */
 #define SX1280_IRAM_START_ADDRESS                          0x8000
@@ -1383,14 +1383,14 @@ void SX1280SetLNAGainSetting( const SX1280_RadioLnaSettings_t lnaSetting );
 void SX1280SetRangingIdLength( SX1280_RadioRangingIdCheckLengths_t length );
 
 /*!
- * \brief Sets ranging device id
+ * \brief Sets ranging device id for slave
  *
  * \param [in]  address       Device address
  */
 void SX1280SetDeviceRangingAddress( uint32_t address );
 
 /*!
- * \brief Sets the device id to ping in a ranging request
+ * \brief Sets the device id to ping in a ranging request for master
  *
  * \param [in]  address       Address of the device to ping
  */

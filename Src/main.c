@@ -37,7 +37,15 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define LORAMODE             0  //0 for Tx and 1 for Rx
+
+/*
+ *\brief 0 for Tx and 1 for Rx
+ */
+#define LORAMODE             0
+/*
+ *\brief 0 for LORA and 1 for RANGING
+ */
+#define APPMODE              1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -96,51 +104,101 @@ int main(void)
    uint8_t RxData[20];
    uint8_t RxSize = 0;
    uint8_t rssi;
+   double distance;
    
-   LORA2G4Init();
+    LORA2G4SetParams();
     
-    #if (LORAMODE == 1)
+    printf("System init\r\n");
+
+    #if (APPMODE == 0)
     {
-        LORA2G4SetRx();
+        printf("APP for LORA\r\n");
+        LORA2G4Init();
+        #if (LORAMODE == 1)
+        {
+            LORA2G4SetRx();
+            printf("Role for Rx\r\n");
+        }
+        #else
+        {
+            printf("Role for Tx\r\n");
+        }
+        #endif /*LORAMODE*/
     }
-    #endif
+    #else
+    {
+        printf("APP for RANGING\r\n");
+        #if (LORAMODE == 1)
+        {
+            printf("Role for slave\r\n");
+            LORA2G4InitRanging(SX1280_RADIO_RANGING_ROLE_SLAVE);
+        }
+        #else
+        {
+            printf("Role for master\r\n");
+            LORA2G4InitRanging(SX1280_RADIO_RANGING_ROLE_MASTER);
+        }
+        #endif /*LORAMODE*/
+    }
+    #endif /*APPMODE*/
+    
+    printf("-------------------------\r\n");
     
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
-//      status = SX1280GetStatus();
-//      while(HAL_UART_Transmit_IT(&huart1, &status.Value, 1) == HAL_BUSY);
+  {   
       
-      #if (LORAMODE == 0)
+      #if (APPMODE == 0)
       {
-          while(HAL_UART_Transmit_IT(&huart1, "hello\r\n", 7) == HAL_BUSY);
-          LORA2G4SendData("hello\r\n", 7);
-          HAL_Delay(40);
+          #if (LORAMODE == 0)
+          {
+              printf("hello world\r\n");
+              LORA2G4SendData("hello\r\n", 7);
+              HAL_Delay(400);
+          }
+          #else
+          {
+              if (HAL_GPIO_ReadPin(DIO1_2G4_GPIO_Port, DIO1_2G4_Pin) == 1)
+              {
+                  SX1280GetPayload(RxData, &RxSize, LORA2G4_BUFFER_SIZE);
+                  SX1280ClearIrqStatus(SX1280_IRQ_RADIO_ALL);
+                  
+                  rssi = SX1280GetRssiInst();
+
+                  printf("Received msg: ");
+                  while(HAL_UART_Transmit_IT(&huart1, RxData, RxSize) == HAL_BUSY);
+                  while(HAL_UART_Transmit_IT(&huart1, "\r\n", 2) == HAL_BUSY);
+                  printf("Rssi: %d\r\n----------\r\n", rssi);
+                  
+                  LORA2G4SetRx();
+              }
+          }
+          #endif /*LORAMODE*/
       }
       #else
       {
-          if (HAL_GPIO_ReadPin(DIO1_2G4_GPIO_Port, DIO1_2G4_Pin) == 1)
+          #if (LORAMODE == 0)
           {
-              SX1280GetPayload(RxData, &RxSize, LORA2G4_BUFFER_SIZE);
-              SX1280ClearIrqStatus(SX1280_IRQ_RADIO_ALL);
-              
-              rssi = SX1280GetRssiInst();
+              if (HAL_GPIO_ReadPin(DIO1_2G4_GPIO_Port, DIO1_2G4_Pin) == 1)
+              {
+                  distance = SX1280GetRangingResult(SX1280_RANGING_RESULT_RAW);
+                  printf("Distace is : %.2lfm\r\n", distance);
 
-              while(HAL_UART_Transmit_IT(&huart1, "Received msg: ", 14) == HAL_BUSY);
-              while(HAL_UART_Transmit_IT(&huart1, RxData, RxSize) == HAL_BUSY);
-              while(HAL_UART_Transmit_IT(&huart1, "\r\n", 2) == HAL_BUSY);
-              
-              while(HAL_UART_Transmit_IT(&huart1, "Rssi: ", 6) == HAL_BUSY);
-              SendHexToStr(rssi);
-              while(HAL_UART_Transmit_IT(&huart1, "\r\n----------\r\n", 14) == HAL_BUSY);
-              
-              LORA2G4SetRx();
+                  HAL_Delay(1000);
+                  LORA2G4InitRanging(SX1280_RADIO_RANGING_ROLE_MASTER);
+              }
           }
+          #else
+          {
+              ;
+          }
+          #endif /*LORAMODE*/
       }
-      #endif
+      #endif /*APPMODE*/
+      
       
     /* USER CODE END WHILE */
 

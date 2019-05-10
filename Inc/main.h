@@ -41,6 +41,11 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+typedef enum
+{
+    APP_LORA               = 0,
+    APP_RANGING            = 1,
+}APP_MODE_t;
 
 /* USER CODE END ET */
 
