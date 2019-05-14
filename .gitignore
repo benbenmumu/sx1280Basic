@@ -3,7 +3,6 @@ MDK-ARM/sx1280Basic
 MDK-ARM/*.scvd
 MDK-ARM/*.MUMU
 MDK-ARM/*.lst
-MDK-ARM/*.s
 *.code-workspace
 .vscode/*
 .vscode/
