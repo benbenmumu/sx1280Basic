@@ -45,7 +45,7 @@
 /*
  *\brief 0 for LORA and 1 for RANGING
  */
-#define APPMODE              1
+#define APPMODE              0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -79,6 +79,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
+  
 
   /* MCU Configuration--------------------------------------------------------*/
 
